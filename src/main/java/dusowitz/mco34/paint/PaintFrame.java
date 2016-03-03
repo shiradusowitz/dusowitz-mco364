@@ -29,6 +29,7 @@ public class PaintFrame extends JFrame {
 		setTitle("PaintFrame");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
@@ -70,7 +71,7 @@ public class PaintFrame extends JFrame {
 		bucket = new JButton("BUCKET");
 		bucket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				canvas.setTool(new BucketTool(canvas.getBufferedImage()));
+				canvas.setTool(new BucketTool(canvas));
 			}
 		});
 
@@ -95,7 +96,7 @@ public class PaintFrame extends JFrame {
 			}
 		});
 
-		colorChooser = new JColorChooser(Color.MAGENTA);
+		colorChooser = new JColorChooser();
 		colorChooser.setPreviewPanel(new JPanel());
 		colorChooser.getSelectionModel().addChangeListener(
 				new ChangeListener() {
