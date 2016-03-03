@@ -3,10 +3,13 @@ package dusowitz.mco34.paint;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
@@ -37,7 +40,8 @@ public class PaintFrame extends JFrame {
 		canvas = new Canvas();
 		canvas.setTool(new PencilTool());
 
-		line = new JButton("LINE");
+		line = new JButton();
+		line.setIcon(new ImageIcon(new ImageIcon("./line.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 		line.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -45,7 +49,9 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		pencil = new JButton("PENCIL");
+		pencil = new JButton();
+		pencil.setIcon(new ImageIcon(new ImageIcon("./pencil.jpg").getImage().getScaledInstance(50, 50,
+				Image.SCALE_SMOOTH)));
 		pencil.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -54,28 +60,35 @@ public class PaintFrame extends JFrame {
 
 		});
 
-		rectangle = new JButton("RECTANGLE");
+		rectangle = new JButton();
+		rectangle.setIcon(new ImageIcon(new ImageIcon("./rectangle.png").getImage().getScaledInstance(50, 50,
+				Image.SCALE_SMOOTH)));
 		rectangle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				canvas.setTool(new RectangleTool());
 			}
 		});
 
-		oval = new JButton("OVAL");
+		oval = new JButton();
+		oval.setIcon(new ImageIcon(new ImageIcon("./oval.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 		oval.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				canvas.setTool(new OvalTool());
 			}
 		});
 
-		bucket = new JButton("BUCKET");
+		bucket = new JButton();
+		bucket.setIcon(new ImageIcon(new ImageIcon("./bucket.jpg").getImage().getScaledInstance(50, 50,
+				Image.SCALE_SMOOTH)));
 		bucket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				canvas.setTool(new BucketTool(canvas));
 			}
 		});
 
-		JButton clear = new JButton("CLEAR");
+		JButton clear = new JButton();
+		clear.setIcon(new ImageIcon(new ImageIcon("./clear.jpg").getImage().getScaledInstance(50, 50,
+				Image.SCALE_SMOOTH)));
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				canvas.clear();
@@ -83,13 +96,15 @@ public class PaintFrame extends JFrame {
 			}
 		});
 
-		undo = new JButton("UNDO");
+		undo = new JButton();
+		undo.setIcon(new ImageIcon(new ImageIcon("./undo.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 		undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				canvas.undo();
 			}
 		});
-		redo = new JButton("REDO");
+		redo = new JButton();
+		redo.setIcon(new ImageIcon(new ImageIcon("./redo.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 		redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				canvas.redo();
@@ -98,16 +113,16 @@ public class PaintFrame extends JFrame {
 
 		colorChooser = new JColorChooser();
 		colorChooser.setPreviewPanel(new JPanel());
-		colorChooser.getSelectionModel().addChangeListener(
-				new ChangeListener() {
+		colorChooser.setPreferredSize(new Dimension(100, 140));
+		colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
 
-					public void stateChanged(ChangeEvent arg0) {
-						Color newColor = colorChooser.getColor();
-						canvas.setColor(newColor);
-						setForeground(newColor);
-					}
+			public void stateChanged(ChangeEvent arg0) {
+				Color newColor = colorChooser.getColor();
+				canvas.setColor(newColor);
+				setForeground(newColor);
+			}
 
-				});
+		});
 
 		JPanel options = new JPanel();
 		options.setLayout(new FlowLayout());

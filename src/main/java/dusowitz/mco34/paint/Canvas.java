@@ -46,14 +46,12 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent event) {
 				buffer = deepCopy(undo.peek());
-				tool.mousePressed(buffer.getGraphics(), event.getX(),
-						event.getY(), color);
+				tool.mousePressed(buffer.getGraphics(), event.getX(), event.getY(), color);
 				repaint();
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(buffer.getGraphics(), event.getX(),
-						event.getY(), color);
+				tool.mouseReleased(buffer.getGraphics(), event.getX(), event.getY(), color);
 				undo.push(buffer);
 				repaint();
 			}
@@ -63,8 +61,7 @@ public class Canvas extends JPanel {
 
 			public void mouseDragged(MouseEvent event) {
 
-				tool.mouseDragged(buffer.getGraphics(), event.getX(),
-						event.getY(), color);
+				tool.mouseDragged(buffer.getGraphics(), event.getX(), event.getY(), color);
 
 				repaint();
 			}
@@ -91,6 +88,7 @@ public class Canvas extends JPanel {
 	public void clear() {
 		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
 		undo.push(deepCopy(buffer));
+		revalidate();
 		repaint();
 	}
 
