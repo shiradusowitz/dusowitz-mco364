@@ -18,13 +18,18 @@ public class Canvas extends JPanel {
 	private final Stack<BufferedImage> redo;
 	private BufferedImage buffer;
 	private Tool tool;
-	private Color color;
+	private final PaintProperties properties;
 
 	public Canvas() {
 
-		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
 		setBackground(Color.WHITE);
-		color = Color.BLACK;
+		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+		// tool = new LineTool(properties);
+
+		properties = new PaintProperties();
+		properties.setImage(buffer);
+		properties.setColor(Color.BLACK);
+
 		undo = new Stack<BufferedImage>();
 		redo = new Stack<BufferedImage>();
 		undo.push(buffer);
@@ -46,12 +51,12 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent event) {
 				buffer = deepCopy(undo.peek());
-				tool.mousePressed(buffer.getGraphics(), event.getX(), event.getY(), color);
+				tool.mousePressed(buffer.getGraphics(), event.getX(), event.getY());
 				repaint();
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(buffer.getGraphics(), event.getX(), event.getY(), color);
+				tool.mouseReleased(buffer.getGraphics(), event.getX(), event.getY());
 				undo.push(buffer);
 				repaint();
 			}
@@ -61,7 +66,7 @@ public class Canvas extends JPanel {
 
 			public void mouseDragged(MouseEvent event) {
 
-				tool.mouseDragged(buffer.getGraphics(), event.getX(), event.getY(), color);
+				tool.mouseDragged(buffer.getGraphics(), event.getX(), event.getY());
 
 				repaint();
 			}
@@ -78,7 +83,7 @@ public class Canvas extends JPanel {
 		super.paintComponent(g);
 
 		g.drawImage(buffer, 0, 0, null);
-		tool.drawPreview(g, color);
+		tool.drawPreview(g);
 	}
 
 	public void setTool(Tool tool) {
@@ -126,6 +131,10 @@ public class Canvas extends JPanel {
 	}
 
 	public void setColor(Color newColor) {
-		color = newColor;
+		properties.setColor(newColor);
+	}
+
+	public PaintProperties getProperties() {
+		return properties;
 	}
 }

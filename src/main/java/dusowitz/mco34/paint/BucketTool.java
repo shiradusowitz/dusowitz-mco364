@@ -6,82 +6,62 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BucketTool implements Tool {
+public class BucketTool extends Tool {
 
-	private final Canvas canvas;
-	private final BufferedImage bufferedImage;
+	private final BufferedImage image;
+	private final Queue<Point> points;
+	private Color color;
 
-	public BucketTool(Canvas canvas) {
-		this.canvas = canvas;
-		this.bufferedImage = canvas.getBufferedImage();
+	public BucketTool(PaintProperties properties) {
+		super(properties);
+		image = properties.getImage();
+		points = new LinkedList<Point>();
 	}
 
-	public void mousePressed(Graphics g, int x, int y, Color color) {
-		g.setColor(color);
-		fill(new Point(x, y), bufferedImage.getRGB(x, y), color.getRGB());
+	@Override
+	public void mousePressed(Graphics g, int x, int y) {
 	}
 
-	public void mouseReleased(Graphics g, int x, int y, Color color) {
+	@Override
+	public void mouseReleased(Graphics g, int x, int y) {
+		color = properties.getColor();
+		fill(x, y, color);
+	}
+
+	@Override
+	public void mouseDragged(Graphics g, int x, int y) {
 
 	}
 
-	public void mouseDragged(Graphics g, int x, int y, Color color) {
+	@Override
+	public void drawPreview(Graphics g) {
 
 	}
 
-	public void drawPreview(Graphics g, Color color) {
-
-	}
-
-	private void fill(Point point, int sourceColor, int selectedColor) {
-		Queue<Point> points = new LinkedList<Point>();
+	private void fill(int x, int y, Color newColor) {
+		Point point = new Point(x, y);
+		int rgb = image.getRGB(x, y);
+		int target = newColor.getRGB();
+		if (rgb == target) {
+			return;
+		}
 		points.add(point);
 
 		while (!points.isEmpty()) {
 			point = points.remove();
-			int currentX = point.getX();
-			int currentY = point.getY();
+			x = point.getX();
+			y = point.getY();
 
-			int left = currentX;
-			int right = currentX;
-			int leftColor = bufferedImage.getRGB(left, currentY);
-			int rightColor = bufferedImage.getRGB(right, currentY);
+			if ((x < image.getWidth()) && (x >= 0) && (y < image.getHeight()) && (y >= 0)) {
 
-			while (leftColor == sourceColor) {
-				left--;
-				if (left > 0) {
-					leftColor = bufferedImage.getRGB(left, currentY);
-				} else {
-					break;
+				if (image.getRGB(x, y) == rgb) {
+					image.setRGB(x, y, target);
+					points.add(new Point(x, y + 1));
+					points.add(new Point(x, y - 1));
+					points.add(new Point(x + 1, y));
+					points.add(new Point(x - 1, y));
 				}
 			}
-
-			while (rightColor == sourceColor) {
-				right++;
-				if (right < bufferedImage.getWidth()) {
-					rightColor = bufferedImage.getRGB(right, currentY);
-				} else {
-					break;
-				}
-			}
-
-			for (int i = left; i < right; i++) {
-				bufferedImage.setRGB(i, currentY, selectedColor);
-			}
-
-			if ((currentY + 1) < bufferedImage.getHeight()) {
-				if (bufferedImage.getRGB(currentX, currentY + 1) == sourceColor) {
-					points.add(new Point(currentX, currentY + 1));
-				}
-			}
-
-			if ((currentY - 1) > 0) {
-				if (bufferedImage.getRGB(currentX, currentY - 1) == sourceColor) {
-					points.add(new Point(currentX, currentY - 1));
-				}
-			}
-			bufferedImage.setRGB(point.getX(), point.getY(), selectedColor);
 		}
-		canvas.setBufferedImage(bufferedImage);
 	}
 }
