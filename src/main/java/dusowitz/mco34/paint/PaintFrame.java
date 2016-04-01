@@ -17,6 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+
 public class PaintFrame extends JFrame {
 
 	private final JButton clear, undo, redo;
@@ -25,18 +29,21 @@ public class PaintFrame extends JFrame {
 	private final ActionListener listener;
 	private final JPanel toolbar;
 	private final ToolButton[] buttons;
+	private final PaintProperties properties;
 
-	public PaintFrame() {
+	@Inject
+	public PaintFrame(PaintProperties properties) {
 		setTitle("PaintFrame");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		this.properties = properties;
 
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
 		container.setBackground(Color.WHITE);
 
-		canvas = new Canvas();
+		canvas = new Canvas(properties);
 		canvas.setTool(new PencilTool(canvas.getProperties()));
 
 		toolbar = new JPanel();
@@ -52,11 +59,11 @@ public class PaintFrame extends JFrame {
 
 		};
 
-		buttons = new ToolButton[] { new ToolButton(new LineTool(canvas.getProperties()), "/line.png"),
-				new ToolButton(new PencilTool(canvas.getProperties()), "/pencil.jpg"),
-				new ToolButton(new RectangleTool(canvas.getProperties()), "/rectangle.png"),
-				new ToolButton(new OvalTool(canvas.getProperties()), "/oval.jpg"),
-				new ToolButton(new BucketTool(canvas.getProperties()), "/bucket.jpg") };
+		buttons = new ToolButton[] { new ToolButton(new LineTool(properties), "/line.png"),
+				new ToolButton(new PencilTool(properties), "/pencil.jpg"),
+				new ToolButton(new RectangleTool(properties), "/rectangle.png"),
+				new ToolButton(new OvalTool(properties), "/oval.jpg"),
+				new ToolButton(new BucketTool(properties), "/bucket.jpg") };
 
 		for (ToolButton button : buttons) {
 			toolbar.add(button);
@@ -120,6 +127,7 @@ public class PaintFrame extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new PaintFrame();
+		Injector injector = Guice.createInjector(new PaintModule());
+		PaintFrame frame = injector.getInstance(PaintFrame.class);
 	}
 }

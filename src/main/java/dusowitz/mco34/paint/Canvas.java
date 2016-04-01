@@ -2,6 +2,7 @@ package dusowitz.mco34.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -20,15 +21,14 @@ public class Canvas extends JPanel {
 	private Tool tool;
 	private final PaintProperties properties;
 
-	public Canvas() {
+	public Canvas(PaintProperties properties) {
 
 		setBackground(Color.WHITE);
 		buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-		// tool = new LineTool(properties);
 
-		properties = new PaintProperties();
-		properties.setImage(buffer);
-		properties.setColor(Color.BLACK);
+		this.properties = properties;
+		this.properties.setImage(buffer);
+		this.properties.setColor(Color.BLACK);
 
 		undo = new Stack<BufferedImage>();
 		redo = new Stack<BufferedImage>();
@@ -51,12 +51,12 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent event) {
 				buffer = deepCopy(undo.peek());
-				tool.mousePressed(buffer.getGraphics(), event.getX(), event.getY());
+				tool.mousePressed((Graphics2D) buffer.getGraphics(), event.getX(), event.getY());
 				repaint();
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				tool.mouseReleased(buffer.getGraphics(), event.getX(), event.getY());
+				tool.mouseReleased((Graphics2D) buffer.getGraphics(), event.getX(), event.getY());
 				undo.push(buffer);
 				repaint();
 			}
@@ -66,7 +66,7 @@ public class Canvas extends JPanel {
 
 			public void mouseDragged(MouseEvent event) {
 
-				tool.mouseDragged(buffer.getGraphics(), event.getX(), event.getY());
+				tool.mouseDragged((Graphics2D) buffer.getGraphics(), event.getX(), event.getY());
 
 				repaint();
 			}
@@ -83,7 +83,7 @@ public class Canvas extends JPanel {
 		super.paintComponent(g);
 
 		g.drawImage(buffer, 0, 0, null);
-		tool.drawPreview(g);
+		tool.drawPreview((Graphics2D) g);
 	}
 
 	public void setTool(Tool tool) {

@@ -1,6 +1,6 @@
 package dusowitz.mco34.paint;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class PencilTool extends Tool {
 
@@ -12,7 +12,7 @@ public class PencilTool extends Tool {
 	}
 
 	@Override
-	public void mousePressed(Graphics g, int x, int y) {
+	public void mousePressed(Graphics2D g, int x, int y) {
 		g.setColor(properties.getColor());
 		g.fillOval(x, y, 1, 1);
 		this.x = x;
@@ -20,12 +20,12 @@ public class PencilTool extends Tool {
 	}
 
 	@Override
-	public void mouseReleased(Graphics g, int x, int y) {
+	public void mouseReleased(Graphics2D g, int x, int y) {
 
 	}
 
 	@Override
-	public void mouseDragged(Graphics g, int x, int y) {
+	public void mouseDragged(Graphics2D g, int x, int y) {
 		g.setColor(properties.getColor());
 		g.drawLine(x, y, this.x, this.y);
 		this.x = x;
@@ -33,6 +33,6 @@ public class PencilTool extends Tool {
 	}
 
 	@Override
-	public void drawPreview(Graphics g) {
+	public void drawPreview(Graphics2D g) {
 	}
 }

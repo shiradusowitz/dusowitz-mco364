@@ -1,7 +1,7 @@
 package dusowitz.mco34.paint;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -19,22 +19,22 @@ public class BucketTool extends Tool {
 	}
 
 	@Override
-	public void mousePressed(Graphics g, int x, int y) {
+	public void mousePressed(Graphics2D g, int x, int y) {
 	}
 
 	@Override
-	public void mouseReleased(Graphics g, int x, int y) {
+	public void mouseReleased(Graphics2D g, int x, int y) {
 		color = properties.getColor();
 		fill(x, y, color);
 	}
 
 	@Override
-	public void mouseDragged(Graphics g, int x, int y) {
+	public void mouseDragged(Graphics2D g, int x, int y) {
 
 	}
 
 	@Override
-	public void drawPreview(Graphics g) {
+	public void drawPreview(Graphics2D g) {
 
 	}
 
