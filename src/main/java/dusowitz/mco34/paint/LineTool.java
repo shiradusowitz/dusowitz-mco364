@@ -1,10 +1,12 @@
 package dusowitz.mco34.paint;
 
 import java.awt.Graphics2D;
+import java.util.logging.Logger;
 
 public class LineTool extends Tool {
 
 	private final PaintProperties properties;
+	private static final Logger LOG = Logger.getLogger(LineTool.class.getName());
 
 	public LineTool(PaintProperties properties) {
 		super(properties);
@@ -40,5 +42,7 @@ public class LineTool extends Tool {
 	public void drawPreview(Graphics2D g) {
 		g.setColor(properties.getColor());
 		g.drawLine(x1, y1, x2, y2);
+
+		LOG.fine("x1=" + x1 + "y1= " + y1 + "x2= " + x2 + "y2" + y2);
 	}
 }
